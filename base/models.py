@@ -21,10 +21,11 @@ class Priority(models.Model):
         return self.level
     
 class Task(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=100, null=True)
     content = models.CharField(max_length=1000, null=True, blank=True)
-    date_posted = models.DateTimeField(auto_now_add=True, null=True)
-
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    complete = models.BooleanField(default=False)
     user = models.ForeignKey(User, max_length=10, on_delete=models.CASCADE)
 
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
@@ -32,5 +33,7 @@ class Task(models.Model):
 
     def __str__(self):
         return self.title
-
+    
+    class Meta:
+        ordering = ['complete']
 
