@@ -36,7 +36,7 @@ class UpdateTaskForm(forms.ModelForm):
         fields = ['title', 'content', 'priority']
         exclude = ['user']
 
-# - Add categories
+# - categories
         
 class CategoryForm(forms.ModelForm):
     class Meta:

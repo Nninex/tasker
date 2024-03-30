@@ -69,11 +69,17 @@ def dashboard(request):
     return render(request, 'profile/dashboard.html')
 from .models import Category
 
+# - User profile
+
+def user_profile(request):
+    return render(request, 'profile/user-profile.html')
+
 # - Add category
 @login_required(login_url='my-login')
 def add_category(request):
+    form = CategoryForm(request.POST)
     if request.method == 'POST':
-        form = CategoryForm(request.POST)
+        
         if form.is_valid():
             category = form.save(commit=False)
             category.user = request.user  # Assign the current user to the category

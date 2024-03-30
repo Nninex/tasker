@@ -38,4 +38,7 @@ urlpatterns = [
     #----View categories-----#
     path('view-categories/', views.view_categories, name='view-categories'),
 
+    #-----User profile ------#
+    path('user-profile/', views.user_profile, name='user-profile'),
+
 ]

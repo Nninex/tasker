@@ -1,4 +1,4 @@
-{% extends 'base-with-navbar.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block title %}
   Tasker | Add category
@@ -10,7 +10,10 @@
 
   <form class="text-center" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    <div class="form-group">
+      <label for="id_name">Category Name:</label>
+      <input class="form-control" type="text" id="id_name" name="name" />
+    </div>
   </form>
   <div class="text-center">
     <a class="btn btn-outline-success btn-lg" href="{% url 'dashboard' %}">Add Category</a>
