@@ -1,6 +1,7 @@
 import profile
+from django.conf import settings
 from django.urls import path
-
+from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
@@ -37,8 +38,17 @@ urlpatterns = [
 
     #----View categories-----#
     path('view-categories/', views.view_categories, name='view-categories'),
-
+    
+    #----Delete category-----#
+    path('delete-category/<int:category_id>/', views.deleteCategory, name='delete-category'),
+    
     #-----User profile ------#
-    path('user-profile/', views.user_profile, name='user-profile'),
+    path('profile/', views.user_profile, name='profile'),
+
+    #-----Update profile ------#
+    path('profile-update/', views.profile_update, name='profile-update'),
 
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

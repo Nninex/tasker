@@ -1,0 +1,21 @@
+{% extends 'base-with-navbar.html' %}
+{% load static %}
+
+{% block title %}
+  Tasker | Delete Category
+{% endblock %}
+
+{% block content %}
+  <div class="container bg-white shadow-md p-5 form-layout">
+    <h2 class="text-center">Delete Category</h2>
+    <hr /> <br />
+
+    <p>Are you sure you want to delete the category "{{ category.name }}"?</p>
+
+    <form method="POST" autocomplete="off">
+      {% csrf_token %}
+      <input type="submit" class="btn btn-danger" value="Delete" />
+      <a href="{% url 'view-categories' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+{% endblock %}

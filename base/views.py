@@ -1,10 +1,12 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from .forms import CategoryForm, CreateUserForm, LoginForm, CreateTaskForm, UpdateTaskForm, PriorityForm
+from .forms import CategoryForm, CreateUserForm, LoginForm, CreateTaskForm, UpdateTaskForm, PriorityForm, ProfileUpdateForm, UserUpdateForm
 from django.contrib.auth.models import auth
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate,  login
 from django.contrib.auth.decorators import login_required
-from .models import Category, Priority, Task
-
+from .models import Category, Priority, Task, UserProfile
+from django.contrib import messages
+from django.contrib.auth.forms import UserChangeForm
+from .forms import ProfileUpdateForm
 # - VIEWS
 
 def home(request):
@@ -53,23 +55,36 @@ def user_profile(request):
 # - Add category
 @login_required(login_url='my-login')
 def add_category(request):
-    form = CategoryForm(request.POST)
+    
     if request.method == 'POST':
+        form = CategoryForm(request.POST)
         if form.is_valid():
             category = form.save(commit=False)
             category.user = request.user  # Assign the current user to the category
             category.save()
+            messages.success(request, 'Category added successfully')
             return redirect('dashboard')
     else:
         form = CategoryForm()
     return render(request, 'profile/add-category.html', {'form': form})
+
 # - View categories
+
 @login_required(login_url='my-login')
 def view_categories(request):
     categories = Category.objects.filter(user=request.user)  # Filter categories by current user
-    return render(request, 'profile/view-categories.html', {'categories': categories})
+    form = CategoryForm()
+    return render(request, 'profile/view-categories.html', {'categories': categories, 'form':form})
 
-
+# - Delete category
+@login_required(login_url='my-login')
+def deleteCategory(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    if request.method == 'POST':
+        Task.objects.filter(category=category).delete() 
+        category.delete()
+        return redirect('view-categories')
+    return render(request, 'profile/delete-category.html', {'category': category})
 # - Create a task
 
 @login_required(login_url='my-login')
@@ -83,7 +98,7 @@ def createTask(request):
             task = form.save(commit=False)  # cascade წაშლის გამო, ტასკის წაშლას მოჰყვება იუზერიც წაშლაც. so we need to take action!
             task.user = request.user #task will be linked to an user. user that is currently logged in.
             task.save()
-            return redirect('view-tasks') 
+            return redirect('profile/view-tasks') 
     context = {'form':form, 'categories': categories, 'priorities': priorities}
     return render(request, 'profile/create-task.html', context=context)
 
@@ -93,7 +108,15 @@ def createTask(request):
 def viewTask(request): 
     current_user = request.user.id #reference to primary key. to its ID
     task = Task.objects.filter(user=current_user)
-    context = {'task' : task}
+    categories = Category.objects.all()
+    priorities = Priority.objects.all()
+    
+    context = {
+        'task': task,
+        'categories': categories,  # Pass categories to the template context
+        'priorities': priorities,  # Pass priorities to the template context
+    }
+
     return render(request, 'profile/view-tasks.html', context=context) 
 
 # - Update task page
@@ -110,10 +133,11 @@ def updateTask(request, pk):
         form = UpdateTaskForm(instance=task)
     categories = Category.objects.all() 
     priorities = Priority.objects.all() 
-    context = {'form': form, 'task': task}  # Pass the task object to the context
+    context = {'form': form, 'task': task, 'categories': categories, 'priorities': priorities,}  # Pass the task object to the context
     return render(request, 'profile/update-task.html', context=context)
 
 # - Delete task page
+
 @login_required(login_url='my-login')
 def deleteTask(request, pk): 
     task = Task.objects.get(id=pk)
@@ -122,6 +146,7 @@ def deleteTask(request, pk):
         return redirect('view-tasks')
     return render(request, 'profile/delete-task.html') 
 # - Set priority
+
 @login_required(login_url='my-login')
 def set_priority(request):
     if request.method == 'POST':
@@ -133,7 +158,36 @@ def set_priority(request):
         form = PriorityForm()
     return render(request, 'set_priority.html', {'form': form})
 
+# - Update profile
+
+@login_required(login_url='my-login')
+def profile_update(request):
+    # Get the current user instance
+    user = request.user
+
+    # Get or create the user's profile
+    user_profile, created = UserProfile.objects.get_or_create(user=user)
+
+    if request.method == 'POST':
+        # Instantiate forms with instance=user and instance=user_profile
+        user_form = UserUpdateForm(request.POST, instance=user)
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=user_profile)
+        
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()  # Save user form to update core user information
+            profile_form.save()  # Save profile form to update additional user information
+            messages.success(request, 'Your profile has been updated successfully.')
+            return redirect('profile')  # Redirect to the profile page after successful update
+        else:
+            messages.error(request, 'There was an error updating your profile. Please correct the errors below.')
+    else:
+        # If it's a GET request, render the form with the current user's data
+        user_form = UserUpdateForm(instance=user)
+        profile_form = ProfileUpdateForm(instance=user_profile)
+
+    return render(request, 'profile/update-profile.html', {'user_form': user_form, 'profile_form': profile_form})
 # - Logout
+
 def user_logout(request):
     auth.logout(request)
     return redirect("")

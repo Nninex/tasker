@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base-with-navbar.html' %}
 {% load static %}
 
 {% block title %}
@@ -36,11 +36,7 @@
         <label for="id_priority">Priority:</label>
         <select class="form-control" id="id_priority" name="priority">
           {% for priority in priorities %}
-            {% if task.priority_id == priority.id %}
-              <option value="{{ priority.id }}" selected>{{ priority.level }}</option>
-            {% else %}
-              <option value="{{ priority.id }}">{{ priority.level }}</option>
-            {% endif %}
+            <option value="{{ priority.id }}">{{ priority.level }}</option>
           {% endfor %}
         </select>
       </div>

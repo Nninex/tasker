@@ -1,10 +1,10 @@
 from django.forms import ModelForm
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserChangeForm
 from django.contrib.auth.forms import UserCreationForm
 from django.forms.widgets import PasswordInput, TextInput
 from django import forms
-from . models import Category, Task
+from . models import Category, Task, UserProfile
 
 # = Register an user
 class CreateUserForm(UserCreationForm):
@@ -44,9 +44,13 @@ class CategoryForm(forms.ModelForm):
         fields = ['name']
         labels = {'name': 'Category Name'}
 
-    def clean_name(self):
-        name = self.cleaned_data['name']
-        return name
+    def clean(self):
+        cleaned_data = super().clean()
+        name = cleaned_data.get('name')
+        user = self.instance.user  # Get the current user from the instance
+        if Category.objects.filter(name=name, user=user).exists():
+            raise forms.ValidationError("Category with this name already exists.")
+        return cleaned_data
 # - Priorities
 class PriorityForm(forms.Form):
     PRIORITY_CHOICES = [
@@ -57,3 +61,16 @@ class PriorityForm(forms.Form):
     
     priority = forms.ChoiceField(choices=PRIORITY_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
 
+# - User update
+class UserUpdateForm(UserChangeForm):
+    email = forms.EmailField()
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']
+# - Update profile
+    
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['bio', 'image']    

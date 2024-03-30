@@ -1,9 +1,37 @@
-{% extends 'base.html' %}
+{% extends 'base-with-navbar.html' %}
 {% load static %}
 {% block title %}
   Tasker | Profile
 {% endblock %}
 {% block content %}
-  <h1 class="text-center">{{ user.username }}</h1>
-  <hr />
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header">Profile Information</div>
+          <div class="card-body">
+            <div class="d-flex justify-content-end mb-3">
+              {% if user.userprofile %}
+                {% if user.userprofile.image %}
+                  <img src="{{ user.userprofile.image.url }}" alt="Profile Picture" class="img-fluid rounded-circle" style="width: 100px; height: 100px; object-fit: cover; object-position: top right;" />
+                {% else %}
+                  <p>No profile picture available</p>
+                {% endif %}
+              {% else %}
+                <p>No profile information available</p>
+              {% endif %}
+            </div>
+            <h5 class="card-title">Username: {{ user.username }}</h5>
+            <p class="card-text">Email: {{ user.email }}</p>
+            <p class="card-text">First Name: {{ user.first_name }}</p>
+            <p class="card-text">Last Name: {{ user.last_name }}</p>
+            {% if user.userprofile %}
+              <p class="card-text">Bio: {{ user.userprofile.bio }}</p>
+            {% endif %}
+            <a href="{% url 'profile-update' %}" class="btn btn-primary">Update Profile</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

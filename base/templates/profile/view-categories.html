@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base-with-navbar.html' %}
 {% load static %}
 {% block title %}
   Tasker | View categories
@@ -9,11 +9,20 @@
   <ul>
     <form method="post">
       {% csrf_token %}
-      {{ form.as_p }}
-      <a class="btn btn-outline-success btn-lg" href="{% url 'add-category' %}">Add New Category</a>
+      <div class="form-group">
+        <ul>
+          {% for category in categories %}
+            <li>
+              {{ category.name }}
+
+              {% csrf_token %}
+              <br /><br />
+              <a href="{% url 'delete-category' category.id %}" class="btn btn-danger btn-sm">Delete</a>
+              <br /><br />
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
     </form>
-    {% for category in categories %}
-      <li>{{ category.name }}</li>
-    {% endfor %}
   </ul>
 {% endblock %}
