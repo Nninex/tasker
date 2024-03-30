@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+<br />
+{% block title %}
+  Tasker | Login
+{% endblock %}
+
+{% block content %}
+  {% include 'navbar.html' %}
+  <div class="container bg-white shadow-md p-5 form-layout">
+    <h2>Login</h2>
+    <br />
+    <form method="POST" autocomplete="off">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <br />
+      <input class="btn btn-success navbar-btn" type="submit" value="Log In" />
+      <br /><br />
+      <p>
+        Don't have an account? <br /><br /> <a href="{% url 'register' %}" class="green-link">Register</a>
+      </p>
+    </form>
+  </div>
+{% endblock %}

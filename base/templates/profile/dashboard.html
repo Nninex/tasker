@@ -1,0 +1,21 @@
+{% extends 'base-with-navbar.html' %}
+{% load static %}
+{% block title %}
+  Tasker | Dashboard
+{% endblock %}
+
+{% block content %}
+  <h1 class="text-center">Tasker - Welcome to your Task Manager!</h1>
+  <br />
+
+  <p class="text-center">Go ahead and plan your future!</p>
+  <br />
+
+  <div class="text-center">
+    <a class="btn btn-outline-success btn-lg" href="{% url 'create-task' %}">Create Task</a>
+    <br /> <br />
+    <a class="btn btn-outline-primary btn-lg" href="{% url 'add-category' %}">Add Category</a>
+    <br /><br />
+    <a class="btn btn-outline-primary btn-lg" href="{% url 'add-category' %}">View Categories</a>
+  </div>
+{% endblock %}
