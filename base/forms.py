@@ -4,7 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
 from django.forms.widgets import PasswordInput, TextInput
 from django import forms
-from . models import Category, Task, User_profile
+from . models import Category, Task
 
 # = Register an user
 class CreateUserForm(UserCreationForm):
@@ -57,9 +57,3 @@ class PriorityForm(forms.Form):
     
     priority = forms.ChoiceField(choices=PRIORITY_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
 
-# - Profile
-    
-class ProfileForm(forms.ModelForm):
-    class Meta:
-        model = User_profile
-        fields = ['bio', 'profile_picture']

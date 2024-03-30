@@ -1,8 +1,6 @@
 import profile
 from django.urls import path
 
-from base.models import User_profile
-
 from . import views
 
 urlpatterns = [
@@ -40,6 +38,4 @@ urlpatterns = [
     #----View categories-----#
     path('view-categories/', views.view_categories, name='view-categories'),
 
-    #----Profile-----#
-    path('user-profile/', views.user_profile, name='user-profile'), 
 ]

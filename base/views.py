@@ -1,7 +1,6 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from django.http import HttpResponse
 
-from .forms import CategoryForm, CreateUserForm, LoginForm, CreateTaskForm, ProfileForm, UpdateTaskForm, PriorityForm
+from .forms import CategoryForm, CreateUserForm, LoginForm, CreateTaskForm, UpdateTaskForm, PriorityForm
 
 from django.contrib.auth.models import auth
 from django.contrib.auth import authenticate, login
@@ -168,18 +167,6 @@ def set_priority(request):
         form = PriorityForm()
     return render(request, 'set_priority.html', {'form': form})
 
-# user profile 
-@login_required(login_url='my-login')
-def user_profile(request):
-    user_profile_instance = request.user.user_profile
-    if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES, instance=user_profile_instance)
-        if form.is_valid():
-            form.save()
-            return redirect('user-profile')
-    else:
-        form = ProfileForm(instance=user_profile_instance)
-    return render(request, 'profile/user-profile.html', {'form': form})
 
 # - Logout
 def user_logout(request):

@@ -29,7 +29,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('base.urls')),
     path('register', register),
-    path('login/', views.login_view, name='my-login'),
+    path('login/', views.my_login, name='my-login'),
 ]
 
 
