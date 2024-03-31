@@ -55,15 +55,17 @@ def user_profile(request):
 # - Add category
 @login_required(login_url='my-login')
 def add_category(request):
-    
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         if form.is_valid():
             category = form.save(commit=False)
-            category.user = request.user  # Assign the current user to the category
-            category.save()
-            messages.success(request, 'Category added successfully')
-            return redirect('dashboard')
+            category.user = request.user
+            if Category.objects.filter(name=category.name, user=request.user).exists():
+                messages.error(request, "Category with this name already exists.")
+            else:
+                category.save()
+                messages.success(request, 'Category added successfully')
+                return redirect('dashboard')
     else:
         form = CategoryForm()
     return render(request, 'profile/add-category.html', {'form': form})
@@ -85,6 +87,7 @@ def deleteCategory(request, category_id):
         category.delete()
         return redirect('view-categories')
     return render(request, 'profile/delete-category.html', {'category': category})
+
 # - Create a task
 
 @login_required(login_url='my-login')
@@ -162,30 +165,23 @@ def set_priority(request):
 
 @login_required(login_url='my-login')
 def profile_update(request):
-    # Get the current user instance
     user = request.user
-
-    # Get or create the user's profile
     user_profile, created = UserProfile.objects.get_or_create(user=user)
 
     if request.method == 'POST':
-        # Instantiate forms with instance=user and instance=user_profile
         user_form = UserUpdateForm(request.POST, instance=user)
         profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=user_profile)
         
         if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()  # Save user form to update core user information
-            profile_form.save()  # Save profile form to update additional user information
-            messages.success(request, 'Your profile has been updated successfully.')
+            user_form.save() 
+            profile_form.save()
             return redirect('profile')  # Redirect to the profile page after successful update
-        else:
-            messages.error(request, 'There was an error updating your profile. Please correct the errors below.')
     else:
-        # If it's a GET request, render the form with the current user's data
         user_form = UserUpdateForm(instance=user)
         profile_form = ProfileUpdateForm(instance=user_profile)
 
     return render(request, 'profile/update-profile.html', {'user_form': user_form, 'profile_form': profile_form})
+
 # - Logout
 
 def user_logout(request):

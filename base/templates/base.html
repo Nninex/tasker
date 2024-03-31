@@ -32,7 +32,13 @@
 
     <div class="container bg-white shadow-md p-5">
       {% block content %}
-
+        {% if messages %}
+          <ul class="messages">
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
       {% endblock %}
     </div>
     <!-- Scripts -->
