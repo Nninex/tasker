@@ -121,5 +121,5 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 ALLOWED_HOSTS = [
-    '<todo_list-web>.on.dockerize.io'
+    '<todo_list-web>.on.dockerize.io', '127.0.0.1', 'localhost'
 ]
