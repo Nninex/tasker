@@ -98,7 +98,7 @@ def createTask(request):
             task = form.save(commit=False)  # cascade წაშლის გამო, ტასკის წაშლას მოჰყვება იუზერიც წაშლაც. so we need to take action!
             task.user = request.user #task will be linked to an user. user that is currently logged in.
             task.save()
-            return redirect('profile/view-tasks') 
+            return redirect('view-tasks') 
     context = {'form':form, 'categories': categories, 'priorities': priorities}
     return render(request, 'profile/create-task.html', context=context)
 
