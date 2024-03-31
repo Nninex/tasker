@@ -6,7 +6,7 @@
 user registration,  login, logout 
 
 ## profile
-view and update profile (including uploading an image) [some issues in changing first and last name]
+view and update profile (including uploading an image) 
 
 ## tasks
 add, view and delete tasks 
