@@ -110,14 +110,14 @@ def createTask(request):
 @login_required(login_url='my-login')
 def viewTask(request): 
     current_user = request.user.id #reference to primary key. to its ID
-    task = Task.objects.filter(user=current_user)
+    task = Task.objects.filter(user=current_user).select_related('category', 'priority')
     categories = Category.objects.all()
     priorities = Priority.objects.all()
     
     context = {
         'task': task,
-        'categories': categories,  # Pass categories to the template context
-        'priorities': priorities,  # Pass priorities to the template context
+        'categories': categories,  
+        'priorities': priorities, 
     }
 
     return render(request, 'profile/view-tasks.html', context=context) 
@@ -133,7 +133,7 @@ def updateTask(request, pk):
             form.save()
             return redirect('view-tasks')
     else:
-        form = UpdateTaskForm(instance=task)
+        form = UpdateTaskForm(instance=task, initial={'title': task.title, 'content': task.content})
     categories = Category.objects.all() 
     priorities = Priority.objects.all() 
     context = {'form': form, 'task': task, 'categories': categories, 'priorities': priorities,}  # Pass the task object to the context
