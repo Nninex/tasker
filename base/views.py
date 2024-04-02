@@ -133,7 +133,7 @@ def updateTask(request, pk):
             form.save()
             return redirect('view-tasks')
     else:
-        form = UpdateTaskForm(instance=task, initial={'title': task.title, 'content': task.content})
+        form = UpdateTaskForm(instance=task, initial={'title': task.title, 'content': task.content, 'category': task.category_id})
     categories = Category.objects.all() 
     priorities = Priority.objects.all() 
     context = {'form': form, 'task': task, 'categories': categories, 'priorities': priorities,}  # Pass the task object to the context

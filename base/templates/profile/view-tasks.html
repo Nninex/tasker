@@ -12,12 +12,15 @@
         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
         <label class="form-check-label" for="flexCheckDefault"><h3>{{ t.title }}</h3></label>
       </div>
-      <br /> <br />
-      {{ t.content }}
+      <p>
+        Content:
+        <br /> {{ t.content }}
+      </p>
+      <p>Created: {{ t.created }}</p>
+      <p>Category: {{ t.category }}</p>
+      <p>Priority: {{ t.priority }}</p>
+
       <br /><br />
-      <p>Category: {{ t.category.name }}</p>
-      <p>Priority: {{ t.priority.level }}</p>
-      <br />
       <a class="btn btn-success navbar-btn" type="button" href="{% url 'update-task' t.id %}">Update task</a>
       <br /><br />
       <a class="btn btn-warning navbar-btn" type="button" href="{% url 'delete-task' t.id %}">Delete task</a>
