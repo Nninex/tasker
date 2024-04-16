@@ -12,7 +12,7 @@ view and update profile (including uploading an image)
 add, view and delete tasks 
 
 ## priorities
-set priority (high, medium, low) and category to a task [issue: it is seen only in update-task template, not in view-tasks]
+set priority (high, medium, low) and category to a task 
 
 ## categories
 add, delete and view categories
