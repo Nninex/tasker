@@ -11,7 +11,7 @@ urlpatterns = [
 
     #----Register an user----#
     path('register', views.register, name='register'),
-    
+
     #------Login an user-----#
     path('my-login', views.my_login, name='my-login'),
      
@@ -46,7 +46,8 @@ urlpatterns = [
     path('profile/', views.user_profile, name='profile'),
 
     #-----Update profile ------#
-    path('profile-update/', views.profile_update, name='profile-update'),
+    path('profile-update/', views.profile_update, 
+         name='profile-update'),
 
 ]
 

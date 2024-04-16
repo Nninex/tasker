@@ -98,8 +98,8 @@ def createTask(request):
     if request.method == 'POST':
         form = CreateTaskForm(request.POST)
         if form.is_valid():
-            task = form.save(commit=False)  # cascade წაშლის გამო, ტასკის წაშლას მოჰყვება იუზერიც წაშლაც. so we need to take action!
-            task.user = request.user #task will be linked to an user. user that is currently logged in.
+            task = form.save(commit=False) # cascade წაშლის გამო, ტასკის წაშლას მოჰყვება იუზერიც წაშლაც. 
+            task.user = request.user       #task will be linked to an user. user that is currently logged in.
             task.save()
             return redirect('view-tasks') 
     context = {'form':form, 'categories': categories, 'priorities': priorities}
@@ -170,17 +170,19 @@ def profile_update(request):
 
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=user)
-        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=user_profile)
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, 
+                                         instance=user_profile)
         
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save() 
             profile_form.save()
-            return redirect('profile')  # Redirect to the profile page after successful update
+            return redirect('profile')  
     else:
         user_form = UserUpdateForm(instance=user)
         profile_form = ProfileUpdateForm(instance=user_profile)
 
-    return render(request, 'profile/update-profile.html', {'user_form': user_form, 'profile_form': profile_form})
+    return render(request, 'profile/update-profile.html', 
+                  {'user_form': user_form, 'profile_form': profile_form})
 
 # - Logout
 

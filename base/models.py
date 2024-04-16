@@ -40,7 +40,7 @@ class Task(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True)
-    image = models.ImageField(upload_to='profile_pics', blank=True)
+    image = models.ImageField(upload_to='profile_pics')
 
     def __str__(self):
         return f'{self.user.username} Profile'

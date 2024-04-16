@@ -31,6 +31,3 @@ urlpatterns = [
     path('register', register),
     path('login/', views.my_login, name='my-login'),
 ]
-
-
-
