@@ -1,1 +1,1 @@
-web gunicorn base.wsgi:apllication --log-file -
+web gunicorn pr_todo_list.wsgi:apllication --log-file -
